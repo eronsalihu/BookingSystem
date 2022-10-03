@@ -4,6 +4,7 @@ using BookingSystem.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookingSystem.Data.Migrations
 {
     [DbContext(typeof(BookingContext))]
-    partial class BookingContextModelSnapshot : ModelSnapshot
+    [Migration("20221003123937_ModifiedGuestHousesAndRooms")]
+    partial class ModifiedGuestHousesAndRooms
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -126,22 +128,12 @@ namespace BookingSystem.Data.Migrations
 
             modelBuilder.Entity("BookingSystem.Entities.RoomAmenity", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
                     b.Property<string>("Amenities")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("RoomId")
                         .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RoomId");
 
                     b.ToTable("RoomAmenities");
                 });
@@ -168,25 +160,9 @@ namespace BookingSystem.Data.Migrations
                     b.Navigation("GuestHouse");
                 });
 
-            modelBuilder.Entity("BookingSystem.Entities.RoomAmenity", b =>
-                {
-                    b.HasOne("BookingSystem.Entities.Room", "Room")
-                        .WithMany("Amenities")
-                        .HasForeignKey("RoomId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Room");
-                });
-
             modelBuilder.Entity("BookingSystem.Entities.GuestHouse", b =>
                 {
                     b.Navigation("Rooms");
-                });
-
-            modelBuilder.Entity("BookingSystem.Entities.Room", b =>
-                {
-                    b.Navigation("Amenities");
                 });
 #pragma warning restore 612, 618
         }

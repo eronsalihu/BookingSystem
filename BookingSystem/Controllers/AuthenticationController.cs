@@ -1,12 +1,9 @@
-﻿using BookingSystem.Data;
-using BookingSystem.Dtos;
+﻿using BookingSystem.Dtos;
 using BookingSystem.Entities;
 using BookingSystem.Interfaces;
 using BookingSystem.Utils;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Migrations.Operations;
 
 namespace BookingSystem.Controllers
 {
@@ -26,10 +23,14 @@ namespace BookingSystem.Controllers
             _tokenService = tokenService;
         }
 
+
         [HttpGet("email-exists")]
         public async Task<ActionResult<bool>> CheckEmailExistsAsync([FromQuery] string email) =>
             await _userManager.FindByEmailAsync(email) != null;
 
+        [HttpGet("username")]
+        public async Task<ActionResult<bool>> CheckUsernameExistsAsync([FromQuery] string username) =>
+            await _userManager.FindByNameAsync(username) != null;
 
         [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
@@ -56,16 +57,20 @@ namespace BookingSystem.Controllers
         {
             if (CheckEmailExistsAsync(registerDto.Email).Result.Value)
             {
-                return new BadRequestObjectResult(new ApiValidationErrorResponse { Errors = new[] { "Email address is already in use" } });
+                return new BadRequestObjectResult(new ApiValidationErrorResponse { Errors = new[] { "Email address is already in use." } });
+            }
+            if (CheckUsernameExistsAsync(registerDto.Username).Result.Value)
+            {
+                return new BadRequestObjectResult(new ApiValidationErrorResponse { Errors = new[] { "Username is not avaliable." } });
             }
 
             var user = new User
             {
                 FirstName = registerDto.FirstName,
                 LastName = registerDto.LastName,
-                UserName = registerDto.Username,
                 Email = registerDto.Email,
                 PhoneNumber = registerDto.PhoneNumber,
+                UserName = registerDto.Username,
                 Role = Role.NormalUser
             };
 
@@ -90,6 +95,10 @@ namespace BookingSystem.Controllers
             if (CheckEmailExistsAsync(registerDto.Email).Result.Value)
             {
                 return new BadRequestObjectResult(new ApiValidationErrorResponse { Errors = new[] { "Email address is already in use" } });
+            }
+            if (CheckUsernameExistsAsync(registerDto.Username).Result.Value)
+            {
+                return new BadRequestObjectResult(new ApiValidationErrorResponse { Errors = new[] { "Username is not avaliable." } });
             }
 
             var user = new User

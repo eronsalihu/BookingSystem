@@ -21,6 +21,8 @@ namespace BookingSystem.Extensions
                 options.UseSqlServer(connectionString: configuration.GetConnectionString("SqlConnection"));
             });
             services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IGuestHouseService, GuestHouseService>();
+            services.AddScoped<IRoomService, RoomService>();
             services.Configure<ApiBehaviorOptions>(options =>
             {
                 options.InvalidModelStateResponseFactory = actionContext =>

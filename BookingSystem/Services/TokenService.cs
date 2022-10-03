@@ -21,8 +21,8 @@ namespace BookingSystem.Services
         {
             var claims = new List<Claim>
             {
+                new Claim(ClaimTypes.Name, user.Id),
                 new Claim(ClaimTypes.Role,user.Role),
-                /*new Claim(ClaimTypes.Name, user.FirstName +" "+user.LastName),*/
                 new Claim(ClaimTypes.Email, user.Email),
             };
 

@@ -4,6 +4,7 @@ using BookingSystem.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookingSystem.Data.Migrations
 {
     [DbContext(typeof(BookingContext))]
-    partial class BookingContextModelSnapshot : ModelSnapshot
+    [Migration("20221003130842_UpdatedRoomAmenity")]
+    partial class UpdatedRoomAmenity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -171,7 +173,7 @@ namespace BookingSystem.Data.Migrations
             modelBuilder.Entity("BookingSystem.Entities.RoomAmenity", b =>
                 {
                     b.HasOne("BookingSystem.Entities.Room", "Room")
-                        .WithMany("Amenities")
+                        .WithMany()
                         .HasForeignKey("RoomId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -182,11 +184,6 @@ namespace BookingSystem.Data.Migrations
             modelBuilder.Entity("BookingSystem.Entities.GuestHouse", b =>
                 {
                     b.Navigation("Rooms");
-                });
-
-            modelBuilder.Entity("BookingSystem.Entities.Room", b =>
-                {
-                    b.Navigation("Amenities");
                 });
 #pragma warning restore 612, 618
         }
