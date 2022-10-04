@@ -16,6 +16,7 @@ namespace BookingSystem.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            //RoomAmenity
             modelBuilder.Entity<RoomAmenity>().HasKey(e => e.Id);
             modelBuilder.Entity<RoomAmenity>()
                 .Property(e => e.Amenities)
@@ -28,12 +29,12 @@ namespace BookingSystem.Data
             modelBuilder.Entity<GuestHouse>().Property(e => e.Name).IsRequired().HasMaxLength(20);
             modelBuilder.Entity<GuestHouse>().Property(e => e.Description).IsRequired().HasMaxLength(60);
             modelBuilder.Entity<GuestHouse>().HasMany(e => e.Rooms).WithOne(e => e.GuestHouse).OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<GuestHouse>().HasMany(e => e.Books).WithOne(e => e.GuestHouse).OnDelete(DeleteBehavior.Cascade);
 
             //Room
             modelBuilder.Entity<Room>().HasKey(e => e.Id);
             modelBuilder.Entity<Room>().Property(e => e.Name).IsRequired().HasMaxLength(20);
             modelBuilder.Entity<Room>().Property(e => e.Description).IsRequired().HasMaxLength(60);
-            modelBuilder.Entity<Room>().Property(e => e.Image).IsRequired();
             modelBuilder.Entity<Room>().Property(e => e.Price).IsRequired().HasColumnType("decimal(18,2)");
             modelBuilder.Entity<Room>().Property(e => e.Day).IsRequired();
             modelBuilder.Entity<Room>().Property(e => e.NumberOfBeds).IsRequired();

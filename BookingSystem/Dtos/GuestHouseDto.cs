@@ -9,7 +9,6 @@ namespace BookingSystem.Dtos
 
         [Required]
         public string Description { get; set; }
-
-        public List<RoomDto> Rooms { get; set; } = new List<RoomDto>();
+         
     }
 }

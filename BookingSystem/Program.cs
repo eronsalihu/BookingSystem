@@ -28,9 +28,9 @@ using (var scope = app.Services.CreateScope())
         var context = services.GetRequiredService<IdentityContext>();
         await context.Database.MigrateAsync();
         var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-        if (!await roleManager.RoleExistsAsync("GuestHouseOwner"))
+        if (!await roleManager.RoleExistsAsync("GuestHouse"))
         {
-            var admin = new IdentityRole("GuestHouseOwner");
+            var admin = new IdentityRole("GuestHouse");
             await roleManager.CreateAsync(admin);
         }
         if (!await roleManager.RoleExistsAsync("NormalUser"))

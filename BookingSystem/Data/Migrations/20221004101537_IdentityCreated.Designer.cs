@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookingSystem.Data.Migrations
 {
     [DbContext(typeof(IdentityContext))]
-    [Migration("20220930205511_IdentityCreated")]
+    [Migration("20221004101537_IdentityCreated")]
     partial class IdentityCreated
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -37,7 +37,6 @@ namespace BookingSystem.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookingSystem.Data.Migrations
 {
     [DbContext(typeof(BookingContext))]
-    [Migration("20221003130842_UpdatedRoomAmenity")]
-    partial class UpdatedRoomAmenity
+    [Migration("20221004101427_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -104,9 +104,9 @@ namespace BookingSystem.Data.Migrations
                     b.Property<int>("GuestHouseId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Image")
+                    b.Property<byte[]>("Image")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -151,7 +151,7 @@ namespace BookingSystem.Data.Migrations
             modelBuilder.Entity("BookingSystem.Entities.Book", b =>
                 {
                     b.HasOne("BookingSystem.Entities.GuestHouse", "GuestHouse")
-                        .WithMany()
+                        .WithMany("Books")
                         .HasForeignKey("GuestHouseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -173,7 +173,7 @@ namespace BookingSystem.Data.Migrations
             modelBuilder.Entity("BookingSystem.Entities.RoomAmenity", b =>
                 {
                     b.HasOne("BookingSystem.Entities.Room", "Room")
-                        .WithMany()
+                        .WithMany("Amenities")
                         .HasForeignKey("RoomId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -183,7 +183,14 @@ namespace BookingSystem.Data.Migrations
 
             modelBuilder.Entity("BookingSystem.Entities.GuestHouse", b =>
                 {
+                    b.Navigation("Books");
+
                     b.Navigation("Rooms");
+                });
+
+            modelBuilder.Entity("BookingSystem.Entities.Room", b =>
+                {
+                    b.Navigation("Amenities");
                 });
 #pragma warning restore 612, 618
         }

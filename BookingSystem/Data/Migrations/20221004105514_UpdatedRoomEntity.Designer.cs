@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookingSystem.Data.Migrations
 {
     [DbContext(typeof(BookingContext))]
-    [Migration("20220930205147_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20221004105514_UpdatedRoomEntity")]
+    partial class UpdatedRoomEntity
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -101,12 +101,11 @@ namespace BookingSystem.Data.Migrations
                         .HasMaxLength(60)
                         .HasColumnType("nvarchar(60)");
 
-                    b.Property<int?>("GuestHouseId")
+                    b.Property<int>("GuestHouseId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Image")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<byte[]>("Image")
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -128,6 +127,12 @@ namespace BookingSystem.Data.Migrations
 
             modelBuilder.Entity("BookingSystem.Entities.RoomAmenity", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
                     b.Property<string>("Amenities")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -135,13 +140,17 @@ namespace BookingSystem.Data.Migrations
                     b.Property<int>("RoomId")
                         .HasColumnType("int");
 
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoomId");
+
                     b.ToTable("RoomAmenities");
                 });
 
             modelBuilder.Entity("BookingSystem.Entities.Book", b =>
                 {
                     b.HasOne("BookingSystem.Entities.GuestHouse", "GuestHouse")
-                        .WithMany()
+                        .WithMany("Books")
                         .HasForeignKey("GuestHouseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -151,14 +160,36 @@ namespace BookingSystem.Data.Migrations
 
             modelBuilder.Entity("BookingSystem.Entities.Room", b =>
                 {
-                    b.HasOne("BookingSystem.Entities.GuestHouse", null)
+                    b.HasOne("BookingSystem.Entities.GuestHouse", "GuestHouse")
                         .WithMany("Rooms")
-                        .HasForeignKey("GuestHouseId");
+                        .HasForeignKey("GuestHouseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("GuestHouse");
+                });
+
+            modelBuilder.Entity("BookingSystem.Entities.RoomAmenity", b =>
+                {
+                    b.HasOne("BookingSystem.Entities.Room", "Room")
+                        .WithMany("Amenities")
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Room");
                 });
 
             modelBuilder.Entity("BookingSystem.Entities.GuestHouse", b =>
                 {
+                    b.Navigation("Books");
+
                     b.Navigation("Rooms");
+                });
+
+            modelBuilder.Entity("BookingSystem.Entities.Room", b =>
+                {
+                    b.Navigation("Amenities");
                 });
 #pragma warning restore 612, 618
         }

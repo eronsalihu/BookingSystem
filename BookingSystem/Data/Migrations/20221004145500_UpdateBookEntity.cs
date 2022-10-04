@@ -4,7 +4,7 @@
 
 namespace BookingSystem.Data.Migrations
 {
-    public partial class UpdatedRoom : Migration
+    public partial class UpdateBookEntity : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

@@ -4,7 +4,6 @@ using BookingSystem.Interfaces;
 using BookingSystem.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace BookingSystem.Controllers
 {
@@ -23,30 +22,20 @@ namespace BookingSystem.Controllers
             await _guestHouseService.GetGuestHousesAsync(GetCurrentUser());
 
         [HttpPost("guest-house")]
-        public async Task<ActionResult> AddGuestHouse(GuestHouseDto guestHouseDto)
+        public async Task<IActionResult> AddGuestHouse(GuestHouseDto guestHouseDto)
         {
             var guestHouse = new GuestHouse
             {
                 Name = guestHouseDto.Name,
                 Description = guestHouseDto.Description,
                 CreatedBy = GetCurrentUser(),
-                Rooms = guestHouseDto.Rooms.Select(e => new Room
-                {
-                    Name = e.Name,
-                    Description = e.Description,
-                    Image = e.Image,
-                    Price = e.Price,
-                    Day = e.Day,
-                    NumberOfBeds = e.NumberOfBeds,
-                    CreatedBy = GetCurrentUser(),
-                }).ToList(),
             };
 
             return Ok(await _guestHouseService.AddGuestHouseAsync(guestHouse));
         }
 
-        [HttpPut("guest-house/{id}")]
-        public async Task<ActionResult> UpdateGuestHouse(int id, GuestHouseDto guestHouseDto)
+        [HttpPut("guest-house")]
+        public async Task<IActionResult> UpdateGuestHouse(int id, GuestHouseDto guestHouseDto)
         {
             var guestHouse = new GuestHouse
             {
@@ -54,16 +43,6 @@ namespace BookingSystem.Controllers
                 Name = guestHouseDto.Name,
                 Description = guestHouseDto.Description,
                 CreatedBy = GetCurrentUser(),
-                Rooms = guestHouseDto.Rooms.Select(e => new Room
-                {
-                    Name = e.Name,
-                    Description = e.Description,
-                    Image = e.Image,
-                    Price = e.Price,
-                    Day = e.Day,
-                    NumberOfBeds = e.NumberOfBeds,
-                    CreatedBy = GetCurrentUser(),
-                }).ToList(),
             };
 
             if (await _guestHouseService.UpdateGuestHouseAsync(guestHouse) == null)
@@ -72,7 +51,7 @@ namespace BookingSystem.Controllers
             return Ok(await _guestHouseService.UpdateGuestHouseAsync(guestHouse));
         }
 
-        [HttpDelete("delete-guest-house/{id}")]
+        [HttpDelete("delete-guest-house")]
         public void DeleteGuestHouse(int id) =>
               _guestHouseService.DeleteGuestHouseAsync(id);
     }

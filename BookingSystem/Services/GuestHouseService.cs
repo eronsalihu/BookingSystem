@@ -2,7 +2,6 @@
 using BookingSystem.Data.Identity;
 using BookingSystem.Entities;
 using BookingSystem.Interfaces;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookingSystem.Services
@@ -41,18 +40,17 @@ namespace BookingSystem.Services
 
         public async Task<GuestHouse> UpdateGuestHouseAsync(GuestHouse guestHouse)
         {
-            if (_context.GuestHouses.SingleOrDefault(e => e.Id == guestHouse.Id) == null) return null;
-             
+            if (await _context.GuestHouses.AsNoTracking().SingleOrDefaultAsync(e => e.Id == guestHouse.Id) == null) return null;
             _context.GuestHouses.Update(guestHouse);
             await _context.SaveChangesAsync();
             return guestHouse;
         }
 
-        public async void DeleteGuestHouseAsync(int id)
-        { 
+        public void DeleteGuestHouseAsync(int id)
+        {
             var guestHouse = _context.GuestHouses.SingleOrDefault(e => e.Id == id);
             _context.GuestHouses.Remove(guestHouse);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
 
         }
     }

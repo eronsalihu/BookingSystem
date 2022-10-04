@@ -1,4 +1,5 @@
 ﻿using BookingSystem.Entities;
+using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 
 namespace BookingSystem.Dtos
@@ -10,9 +11,6 @@ namespace BookingSystem.Dtos
 
         [Required]
         public string Description { get; set; }
-
-        [Required]
-        public string Image { get; set; }
 
         [Required]
         public decimal Price { get; set; }
