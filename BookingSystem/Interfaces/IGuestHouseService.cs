@@ -1,12 +1,13 @@
-﻿using BookingSystem.Entities;
+﻿using BookingSystem.Dtos;
+using BookingSystem.Entities;
 
 namespace BookingSystem.Interfaces
 {
     public interface IGuestHouseService
     {
-        Task<List<GuestHouse>> GetGuestHousesAsync(string? id);
-        Task<GuestHouse> AddGuestHouseAsync(GuestHouse guestHouse);
-        Task<GuestHouse> UpdateGuestHouseAsync(GuestHouse guestHouse);
+        Task<List<GuestHouseDto>> GetGuestHousesAsync(string? id);
+        Task<GuestHouseDto> AddGuestHouseAsync(GuestHouse guestHouse);
+        Task<GuestHouseDto> UpdateGuestHouseAsync(GuestHouse guestHouse);
         void DeleteGuestHouseAsync(int id);
     }
 }

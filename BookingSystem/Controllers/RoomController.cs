@@ -4,10 +4,6 @@ using BookingSystem.Interfaces;
 using BookingSystem.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.OpenApi.Extensions;
-using System;
-using System.Reflection.Emit;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace BookingSystem.Controllers
 {
@@ -32,12 +28,12 @@ namespace BookingSystem.Controllers
                     Name = roomDto.Name,
                     Description = roomDto.Description,
                     Price = roomDto.Price,
-                    Day = roomDto.Day,
+                    Days = roomDto.Days,
                     NumberOfBeds = roomDto.NumberOfBeds,
                     CreatedBy = GetCurrentUser(),
                     GuestHouseId = roomDto.GuestHouseId,
                     Amenities = roomDto.Amenities.Select(e => new RoomAmenity
-                    { 
+                    {
                         Amenities = e
                     }).ToList() ?? null,
 
@@ -49,7 +45,7 @@ namespace BookingSystem.Controllers
         }
 
         [HttpPut("room")]
-        public async Task<IActionResult> UpdateGuestHouse(int id, [FromBody] RoomDto roomDto)
+        public async Task<IActionResult> UpdateRoom(int id, [FromBody] RoomDto roomDto)
         {
             var room = new Room
             {
@@ -57,25 +53,34 @@ namespace BookingSystem.Controllers
                 Name = roomDto.Name,
                 Description = roomDto.Description,
                 Price = roomDto.Price,
-                Day = roomDto.Day,
+                Days = roomDto.Days,
                 NumberOfBeds = roomDto.NumberOfBeds,
                 CreatedBy = GetCurrentUser(),
                 GuestHouseId = roomDto.GuestHouseId,
                 Amenities = roomDto.Amenities.Select(e => new RoomAmenity
                 {
+                    RoomId = id,
                     Amenities = e
                 }).ToList() ?? null,
             };
-            if (_roomService.UpdateRoomAsync(room) == null) return BadRequest(new ApiException(404, "Room not found"));
+            var updatedRoom = _roomService.UpdateRoomAsync(room);
+            if (updatedRoom.Result == null)
+                return BadRequest(new ApiException(404, "Room not found"));
 
-            return Ok(_roomService.UpdateRoomAsync(room));
+            return Ok(updatedRoom.Result);
         }
 
         [HttpPost("uploadImage")]
-        public async Task<IActionResult> UploadImage(int id, [FromForm] IFormFile file) =>
-             Ok(await _roomService.AddImage(id, ConvertToBase64(file)));
+        public async Task<IActionResult> UploadImage(int id, [FromForm] IFormFile file)
+        {
+            var roomImage = await _roomService.AddImage(id, ConvertToBase64(file));
 
-        [HttpDelete("{id}")]
+            if (roomImage == null) return BadRequest(new ApiException(404, "Couldn't add image"));
+
+            return Ok(roomImage);
+        }
+
+        [HttpDelete("room")]
         public void DeleteRoom(int id) =>
              _roomService.DeleteRoomAsync(id);
     }

@@ -1,5 +1,6 @@
 ﻿using BookingSystem.Data;
 using BookingSystem.Data.Identity;
+using BookingSystem.Dtos;
 using BookingSystem.Entities;
 using BookingSystem.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -17,33 +18,52 @@ namespace BookingSystem.Services
             _identityContext = identityContext;
         }
 
-        public async Task<GuestHouse> AddGuestHouseAsync(GuestHouse guestHouse)
+        public async Task<GuestHouseDto> AddGuestHouseAsync(GuestHouse guestHouse)
         {
             await _context.GuestHouses.AddAsync(guestHouse);
             await _context.SaveChangesAsync();
-            return guestHouse;
+            return new GuestHouseDto
+            {   Id = guestHouse.Id,
+                Name = guestHouse.Name,
+                Description = guestHouse.Description,
+            };
         }
 
-        public async Task<List<GuestHouse>> GetGuestHousesAsync(string? id)
+        public async Task<List<GuestHouseDto>> GetGuestHousesAsync(string? id)
         {
             if (id != null)
             {
                 var user = _identityContext.Users.Where(e => e.Id == id).FirstOrDefault();
                 if (user.Role == Role.GuestHouse)
                 {
-                    return await _context.GuestHouses.Include(e => e.Rooms).ThenInclude(e => e.Amenities).Where(e => e.CreatedBy == id).ToListAsync();
+                    return await _context.GuestHouses.Where(e => e.CreatedBy == id).Select(e => new GuestHouseDto
+                    {
+                        Id = e.Id,
+                        Name = e.Name,
+                        Description = e.Name
+                    }).ToListAsync();
                 }
             }
-            return await _context.GuestHouses.Include(e => e.Rooms).ThenInclude(e => e.Amenities).ToListAsync();
+            return await _context.GuestHouses.Select(e => new GuestHouseDto
+            {
+                Id = e.Id,
+                Name = e.Name,
+                Description = e.Name
+            }).ToListAsync();
 
         }
 
-        public async Task<GuestHouse> UpdateGuestHouseAsync(GuestHouse guestHouse)
+        public async Task<GuestHouseDto> UpdateGuestHouseAsync(GuestHouse guestHouse)
         {
             if (await _context.GuestHouses.AsNoTracking().SingleOrDefaultAsync(e => e.Id == guestHouse.Id) == null) return null;
             _context.GuestHouses.Update(guestHouse);
             await _context.SaveChangesAsync();
-            return guestHouse;
+            return new GuestHouseDto
+            {
+                Id = guestHouse.Id,
+                Name = guestHouse.Name,
+                Description = guestHouse.Description,
+            }; ;
         }
 
         public void DeleteGuestHouseAsync(int id)

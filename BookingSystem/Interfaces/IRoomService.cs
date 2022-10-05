@@ -1,12 +1,13 @@
-﻿using BookingSystem.Entities;
+﻿using BookingSystem.Dtos;
+using BookingSystem.Entities;
 
 namespace BookingSystem.Interfaces
 {
     public interface IRoomService
     {
-        Task<List<Room>> AddRoomsAsync(List<Room> rooms);
-        Task<Room> UpdateRoomAsync(Room room);
-        Task<Room> AddImage(int id, string encodedImage);
+        Task<List<object>> AddRoomsAsync(List<Room> rooms);
+        Task<object> UpdateRoomAsync(Room room);
+        Task<object> AddImage(int id, byte[] encodedImage);
         void DeleteRoomAsync(int id);
     }
 }

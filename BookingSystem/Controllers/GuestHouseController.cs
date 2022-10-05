@@ -17,8 +17,8 @@ namespace BookingSystem.Controllers
             _guestHouseService = guestHouseService;
         }
 
-        [HttpGet("guest-houses")]
-        public async Task<ActionResult<List<GuestHouse>>> GetGuestHouses() =>
+        [HttpGet("guest-house")]
+        public async Task<ActionResult<List<GuestHouseDto>>> GetGuestHouses() =>
             await _guestHouseService.GetGuestHousesAsync(GetCurrentUser());
 
         [HttpPost("guest-house")]
@@ -45,13 +45,15 @@ namespace BookingSystem.Controllers
                 CreatedBy = GetCurrentUser(),
             };
 
-            if (await _guestHouseService.UpdateGuestHouseAsync(guestHouse) == null)
+            var ghUpdate = await _guestHouseService.UpdateGuestHouseAsync(guestHouse);
+
+            if (ghUpdate == null)
                 return NotFound(new ApiResponse(404, "Guest House not found"));
 
-            return Ok(await _guestHouseService.UpdateGuestHouseAsync(guestHouse));
+            return Ok(ghUpdate);
         }
 
-        [HttpDelete("delete-guest-house")]
+        [HttpDelete("guest-house")]
         public void DeleteGuestHouse(int id) =>
               _guestHouseService.DeleteGuestHouseAsync(id);
     }

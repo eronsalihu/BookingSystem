@@ -18,20 +18,23 @@ namespace BookingSystem.Controllers
         }
 
         [HttpPost("book")]
-        public async Task<IActionResult> AddBooking(BookDto bookDto)
+        public async Task<IActionResult> AddBooking(int id, BookDto bookDto)
         {
             var book = new Book
             {
-                GuestHouseId = bookDto.GuestHouseId,
+                Id = id,
                 BookFrom = bookDto.BookFrom,
                 BookTo = bookDto.BookTo,
+                CreatedBy = GetCurrentUser()
             };
-            if ((await _bookingService.AddBookAsync(book) == null)) return BadRequest(new ApiException(404, "Couldn't book guest house!"));
-            return Ok(await _bookingService.AddBookAsync(book));
+            var addedBook = await _bookingService.AddBookAsync(book);
+            if (addedBook == null)
+                return BadRequest(new ApiException(404, "Couldn't book guest house!"));
+            return Ok(addedBook);
         }
 
-        [HttpGet("bookings/{id}")]
-        public async Task<List<Book>> GetBookedDays(int id) =>
+        [HttpGet("bookings")]
+        public async Task<List<BookDto>> GetBookedDays(int id) =>
            await _bookingService.GetBookedGuestHousePerDays(id);
     }
 }

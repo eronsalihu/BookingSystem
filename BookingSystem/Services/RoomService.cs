@@ -3,8 +3,6 @@ using BookingSystem.Dtos;
 using BookingSystem.Entities;
 using BookingSystem.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Immutable;
-using System.Text;
 
 namespace BookingSystem.Services
 {
@@ -17,17 +15,29 @@ namespace BookingSystem.Services
             _context = context;
         }
 
-        public async Task<Room> AddImage(int id, string encodedImage)
+        public async Task<object> AddImage(int id, byte[] encodedImage)
         {
             var room = _context.Rooms.Where(e => e.Id == id).FirstOrDefault();
             if (room == null) return null;
-            room.Image = Encoding.UTF8.GetBytes(encodedImage);
+            room.Image = encodedImage;
             _context.Rooms.Update(room);
             await _context.SaveChangesAsync();
-            return room;
+
+            return new
+            {
+                Id = id,
+                Name = room.Name,
+                Description = room.Description,
+                Price = room.Price,
+                Days = room.Days,
+                Image = room.Image,
+                NumberOfBeds = room.NumberOfBeds,
+                GuestHouse = _context.GuestHouses.Where(e => e.Id == room.GuestHouseId).Select(e => e.Name).FirstOrDefault(),
+                Amenities = room.Amenities.Select(e => e.Amenities.ToString()).ToList()
+            };
         }
 
-        public async Task<List<Room>> AddRoomsAsync(List<Room> rooms)
+        public async Task<List<object>> AddRoomsAsync(List<Room> rooms)
         {
             foreach (var room in rooms)
             {
@@ -36,20 +46,18 @@ namespace BookingSystem.Services
 
             await _context.SaveChangesAsync();
 
-            return rooms.Select(e => new Room
+            return rooms.Select(e => new
             {
                 Id = e.Id,
                 Name = e.Name,
                 Description = e.Description,
                 Price = e.Price,
-                Day = e.Day,
+                Days = e.Days,
                 NumberOfBeds = e.NumberOfBeds,
-                GuestHouseId = e.GuestHouseId,
-                Amenities = e.Amenities.Select(e => new RoomAmenity
-                {
-                    Amenities = e.Amenities
-                }).ToList() ?? null,
-            }).ToList();
+                GuestHouse = _context.GuestHouses.Where(r => r.Id == e.GuestHouseId).Select(r => r.Name).FirstOrDefault(),
+                Amenities = _context.RoomAmenities.Where(r => r.RoomId == e.Id).Select(r => r.Amenities.ToString()).ToList()
+            }).ToList<object>();
+
         }
 
         public async void DeleteRoomAsync(int id)
@@ -58,13 +66,23 @@ namespace BookingSystem.Services
             _context.Rooms.Remove(room);
             await _context.SaveChangesAsync();
         }
-        public async Task<Room> UpdateRoomAsync(Room room)
+
+        public async Task<object> UpdateRoomAsync(Room room)
         {
-            if (await _context.GuestHouses.AsNoTracking().SingleOrDefaultAsync(e => e.Id == room.Id) == null) return null;
+            if (await _context.Rooms.AsNoTracking().SingleOrDefaultAsync(e => e.Id == room.Id) == null) return null;
             _context.Rooms.Update(room);
             await _context.SaveChangesAsync();
-            return room;
+            return new
+            {
+                Name = room.Name,
+                Description = room.Description,
+                Price = room.Price,
+                Days = room.Days,
+                NumberOfBeds = room.NumberOfBeds,
+                GuestHouse = _context.GuestHouses.Where(e => e.Id == room.GuestHouseId).Select(e => e.Name).FirstOrDefault(),
+                Amenities = _context.RoomAmenities.Where(e => e.RoomId == room.Id).Select(e => e.Amenities.ToString()).ToList()
+            };
         }
-         
+
     }
 }
