@@ -34,11 +34,8 @@ using (var scope = app.Services.CreateScope())
     var loggerFactory = services.GetRequiredService<ILoggerFactory>();
     try
     {
-        var userManager = services.GetRequiredService<UserManager<User>>();
-        var identityContext = services.GetRequiredService<IdentityContext>();
-        await identityContext.Database.MigrateAsync(); 
-        await IdentityContextSeed.SeedUserAsync(userManager);
-
+        var identityContext = services.GetRequiredService<IdentityContext>(); 
+        await identityContext.Database.MigrateAsync();
         var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
         if (!await roleManager.RoleExistsAsync("Admin"))
         {
@@ -50,6 +47,8 @@ using (var scope = app.Services.CreateScope())
             var user = new IdentityRole("User");
             await roleManager.CreateAsync(user);
         }
+        var userManager = services.GetRequiredService<UserManager<User>>();
+        await IdentityContextSeed.SeedUserAsync(userManager);
          
     }
     catch (Exception ex)
