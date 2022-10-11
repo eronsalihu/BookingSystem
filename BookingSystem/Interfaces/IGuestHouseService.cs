@@ -3,11 +3,12 @@ using BookingSystem.Entities;
 
 namespace BookingSystem.Interfaces
 {
-    public interface IGuestHouseService
-    {
-        Task<List<GuestHouseDto>> GetGuestHousesAsync(string? id);
-        Task<GuestHouseDto> AddGuestHouseAsync(GuestHouse guestHouse);
-        Task<GuestHouseDto> UpdateGuestHouseAsync(GuestHouse guestHouse);
-        void DeleteGuestHouseAsync(int id);
-    }
+	public interface IGuestHouseService
+	{
+		Task<List<GuestHouseDto>> GetAllGuestHousesAsync();
+		GuestHouseDto GetGuestHousesById(int id);
+		Task<GuestHouseDto> AddGuestHouseAsync(GuestHouse guestHouse);
+		Task<GuestHouseDto> UpdateGuestHouseAsync(GuestHouse guestHouse);
+		void DeleteGuestHouseAsync(int id);
+	}
 }
