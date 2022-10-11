@@ -1,3 +1,4 @@
+using BookingSystem.Data;
 using BookingSystem.Data.Identity;
 using BookingSystem.Entities;
 using BookingSystem.Extensions;
@@ -34,7 +35,10 @@ using (var scope = app.Services.CreateScope())
     var loggerFactory = services.GetRequiredService<ILoggerFactory>();
     try
     {
-        var identityContext = services.GetRequiredService<IdentityContext>(); 
+        var bookingContext = services.GetRequiredService<BookingContext>();
+        await bookingContext.Database.MigrateAsync();
+
+        var identityContext = services.GetRequiredService<IdentityContext>();
         await identityContext.Database.MigrateAsync();
         var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
         if (!await roleManager.RoleExistsAsync("Admin"))
@@ -49,7 +53,7 @@ using (var scope = app.Services.CreateScope())
         }
         var userManager = services.GetRequiredService<UserManager<User>>();
         await IdentityContextSeed.SeedUserAsync(userManager);
-         
+
     }
     catch (Exception ex)
     {
