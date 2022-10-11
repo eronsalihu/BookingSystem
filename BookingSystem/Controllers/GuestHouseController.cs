@@ -19,9 +19,13 @@ namespace BookingSystem.Controllers
 		[HttpGet("guest-house")]
 		public async Task<ActionResult<List<GuestHouseDto>>> GetGuestHouses()
 		{
-
 			return await _guestHouseService.GetAllGuestHousesAsync();
+		}
 
+		[HttpGet("guest-house/{id}")]
+		public ActionResult<GuestHouseDto> GetGuestHouseById(int id)
+		{
+			return _guestHouseService.GetGuestHousesById(id);
 		}
 
 		[HttpPost("guest-house")]
