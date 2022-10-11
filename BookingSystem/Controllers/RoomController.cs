@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BookingSystem.Controllers
 {
-    [Authorize]
     public class RoomController : BaseApiController
     {
         private readonly IRoomService _roomService;
@@ -51,6 +50,7 @@ namespace BookingSystem.Controllers
             {
                 Id = id,
                 Name = roomDto.Name,
+                Image = roomDto.Image,
                 Description = roomDto.Description,
                 Price = roomDto.Price,
                 Days = roomDto.Days,
@@ -71,9 +71,9 @@ namespace BookingSystem.Controllers
         }
 
         [HttpPost("uploadImage")]
-        public async Task<IActionResult> UploadImage(int id, [FromForm] IFormFile file)
+        public async Task<IActionResult> UploadImage(int id,[FromBody] byte[] image)
         {
-            var roomImage = await _roomService.AddImage(id, ConvertToBase64(file));
+            var roomImage = await _roomService.AddImage(id, image);
 
             if (roomImage == null) return BadRequest(new ApiException(404, "Couldn't add image"));
 

@@ -46,6 +46,7 @@ namespace BookingSystem.Controllers
             return new UserDto
             {
                 Username = user.UserName,
+                Role = user.Role,
                 Email = user.Email,
                 Token = _tokenService.CreateToken(user),
             };
@@ -71,14 +72,14 @@ namespace BookingSystem.Controllers
                 Email = registerDto.Email,
                 PhoneNumber = registerDto.PhoneNumber,
                 UserName = registerDto.Username,
-                Role = Role.NormalUser
+                Role = Role.User
             };
 
             var result = await _userManager.CreateAsync(user, registerDto.Password);
 
             if (!result.Succeeded) return BadRequest(new ApiResponse(400));
-            if (await _roleManager.RoleExistsAsync(Role.NormalUser))
-                await _userManager.AddToRoleAsync(user, Role.NormalUser);
+            if (await _roleManager.RoleExistsAsync(Role.User))
+                await _userManager.AddToRoleAsync(user, Role.User);
 
             return new UserDto
             {
@@ -89,7 +90,7 @@ namespace BookingSystem.Controllers
         }
 
 
-        [HttpPost("register-guesthouse")]
+        /*[HttpPost("register-guesthouse")]
         public async Task<ActionResult<UserDto>> RegisterGuestHouse(RegisterDto registerDto)
         {
             if (CheckEmailExistsAsync(registerDto.Email).Result.Value)
@@ -123,6 +124,6 @@ namespace BookingSystem.Controllers
                 Email = user.Email,
                 Token = _tokenService.CreateToken(user),
             };
-        }
+        }*/
     }
 }

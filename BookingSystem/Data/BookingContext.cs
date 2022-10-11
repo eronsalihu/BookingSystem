@@ -1,4 +1,5 @@
 ﻿using BookingSystem.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookingSystem.Data
@@ -15,7 +16,7 @@ namespace BookingSystem.Data
         public DbSet<Book> Bookings { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
+        { 
             //RoomAmenity
             modelBuilder.Entity<RoomAmenity>().HasKey(e => e.Id);
             modelBuilder.Entity<RoomAmenity>()
@@ -46,6 +47,6 @@ namespace BookingSystem.Data
             modelBuilder.Entity<Book>().Property(e => e.BookTo).IsRequired();
 
             base.OnModelCreating(modelBuilder);
-        }
+        } 
     }
 }

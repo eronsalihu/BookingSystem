@@ -10,7 +10,7 @@ namespace BookingSystem.Entities
         public GuestHouse GuestHouse { get; set; }
         public DateTime BookFrom { get; set; }
         public DateTime BookTo { get; set; }
-        public string CreatedBy { get; set; }
+        public string? CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; } = DateTime.Now;
 
     }

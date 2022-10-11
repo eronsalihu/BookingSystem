@@ -12,6 +12,9 @@ namespace BookingSystem.Dtos
         public string Description { get; set; }
 
         [Required]
+        public byte[] Image { get; set; }
+
+        [Required]
         public decimal Price { get; set; }
 
         [Required]

@@ -26,14 +26,14 @@ namespace BookingSystem.Services
             return new
             {
                 Id = id,
-                Name = room.Name,
-                Description = room.Description,
+                Name = room.Name ?? null,
+                Description = room.Description ?? null,
                 Price = room.Price,
                 Days = room.Days,
-                Image = room.Image,
+                Image = room.Image ?? null,
                 NumberOfBeds = room.NumberOfBeds,
                 GuestHouse = _context.GuestHouses.Where(e => e.Id == room.GuestHouseId).Select(e => e.Name).FirstOrDefault(),
-                Amenities = room.Amenities.Select(e => e.Amenities.ToString()).ToList()
+                Amenities = _context.RoomAmenities.Where(e => e.RoomId == id).Select(e => e.Amenities.ToString()).ToList() ?? null
             };
         }
 
@@ -50,12 +50,13 @@ namespace BookingSystem.Services
             {
                 Id = e.Id,
                 Name = e.Name,
+                Image = e.Image ?? null,
                 Description = e.Description,
                 Price = e.Price,
                 Days = e.Days,
                 NumberOfBeds = e.NumberOfBeds,
                 GuestHouse = _context.GuestHouses.Where(r => r.Id == e.GuestHouseId).Select(r => r.Name).FirstOrDefault(),
-                Amenities = _context.RoomAmenities.Where(r => r.RoomId == e.Id).Select(r => r.Amenities.ToString()).ToList()
+                Amenities = _context.RoomAmenities.Where(r => r.RoomId == e.Id).Select(e => e.Amenities.ToString()).ToList() ?? null
             }).ToList<object>();
 
         }
@@ -76,11 +77,12 @@ namespace BookingSystem.Services
             {
                 Name = room.Name,
                 Description = room.Description,
+                Image = room.Image ?? null,
                 Price = room.Price,
                 Days = room.Days,
                 NumberOfBeds = room.NumberOfBeds,
                 GuestHouse = _context.GuestHouses.Where(e => e.Id == room.GuestHouseId).Select(e => e.Name).FirstOrDefault(),
-                Amenities = _context.RoomAmenities.Where(e => e.RoomId == room.Id).Select(e => e.Amenities.ToString()).ToList()
+                Amenities = _context.RoomAmenities.Where(e => e.RoomId == room.Id).Select(e => e.Amenities.ToString()).ToList() ?? null,
             };
         }
 

@@ -2,7 +2,7 @@
 {
     public class Role
     {
-        public const string GuestHouse = "GuestHouse";
-        public const string NormalUser = "NormalUser";
+        public const string Admin = "Admin";
+        public const string User = "User";
     }
 }

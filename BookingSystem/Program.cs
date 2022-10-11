@@ -1,4 +1,5 @@
 using BookingSystem.Data.Identity;
+using BookingSystem.Entities;
 using BookingSystem.Extensions;
 using BookingSystem.Utils.Middleware;
 using Microsoft.AspNetCore.Identity;
@@ -17,7 +18,13 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddIdentityService(builder.Configuration);
 builder.Services.AddSwaggerDocumentation();
-
+builder.Services.AddCors(cors =>
+{
+    cors.AddPolicy("CorsPolicy", policy =>
+    {
+        policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200");
+    });
+});
 
 var app = builder.Build();
 
@@ -27,26 +34,28 @@ using (var scope = app.Services.CreateScope())
     var loggerFactory = services.GetRequiredService<ILoggerFactory>();
     try
     {
-        var context = services.GetRequiredService<IdentityContext>();
-        await context.Database.MigrateAsync();
+        var userManager = services.GetRequiredService<UserManager<User>>();
+        var identityContext = services.GetRequiredService<IdentityContext>();
+        await identityContext.Database.MigrateAsync(); 
+        await IdentityContextSeed.SeedUserAsync(userManager);
+
         var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-        if (!await roleManager.RoleExistsAsync("GuestHouse"))
+        if (!await roleManager.RoleExistsAsync("Admin"))
         {
-            var admin = new IdentityRole("GuestHouse");
+            var admin = new IdentityRole("Admin");
             await roleManager.CreateAsync(admin);
         }
-        if (!await roleManager.RoleExistsAsync("NormalUser"))
+        if (!await roleManager.RoleExistsAsync("User"))
         {
-            var normalUser = new IdentityRole("NormalUser");
-            await roleManager.CreateAsync(normalUser);
+            var user = new IdentityRole("User");
+            await roleManager.CreateAsync(user);
         }
-
-
+         
     }
     catch (Exception ex)
     {
         var logger = loggerFactory.CreateLogger<Program>();
-        logger.LogError(ex, "An error ocurred during migraionts!");
+        logger.LogError(ex, "An error ocurred during migrations!");
     }
 };
 
@@ -57,6 +66,8 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwaggerDocumentation();
 }
+
+app.UseCors("CorsPolicy");
 
 app.UseHttpsRedirection();
 

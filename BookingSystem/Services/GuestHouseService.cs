@@ -33,16 +33,14 @@ namespace BookingSystem.Services
         {
             if (id != null)
             {
-                var user = _identityContext.Users.Where(e => e.Id == id).FirstOrDefault();
-                if (user.Role == Role.GuestHouse)
-                {
-                    return await _context.GuestHouses.Where(e => e.CreatedBy == id).Select(e => new GuestHouseDto
-                    {
-                        Id = e.Id,
-                        Name = e.Name,
-                        Description = e.Name
-                    }).ToListAsync();
-                }
+                
+            return await _context.GuestHouses.Where(e => e.CreatedBy == id).Select(e => new GuestHouseDto
+            {
+                Id = e.Id,
+                Name = e.Name,
+                Description = e.Name
+            }).ToListAsync();
+                 
             }
             return await _context.GuestHouses.Select(e => new GuestHouseDto
             {
