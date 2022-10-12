@@ -36,7 +36,7 @@ namespace BookingSystem.Services
 			{
 				Id = e.Id,
 				Name = e.Name,
-				Description = e.Name
+				Description = e.Description
 			}).ToListAsync();
 
 		}
@@ -82,7 +82,7 @@ namespace BookingSystem.Services
 			{
 				Id = guestHouse.Id,
 				Name = guestHouse.Name,
-				Description = guestHouse.Name
+				Description = guestHouse.Description
 			};
 		}
 	}
