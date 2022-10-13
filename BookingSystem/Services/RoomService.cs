@@ -43,7 +43,7 @@ namespace BookingSystem.Services
         {
             if (await _context.Rooms.AsNoTracking().SingleOrDefaultAsync(e => e.Id == room.Id) == null)
             {
-                throw new KeyNotFoundException($"No guesthouse found with id: {room.Id}");
+                throw new KeyNotFoundException($"No room found with id: {room.Id}");
             }
 
             _context.Rooms.Update(room);
@@ -69,7 +69,7 @@ namespace BookingSystem.Services
 
             if (room == null)
             {
-                throw new KeyNotFoundException($"No guesthouse found with id: {id}");
+                throw new KeyNotFoundException($"No room found with id: {id}");
             }
 
             room.Image = encodedImage;
@@ -117,6 +117,28 @@ namespace BookingSystem.Services
             }
             _context.Rooms.Remove(room);
             await _context.SaveChangesAsync();
+        }
+
+        public RoomDto GetRoomById(int id)
+        {
+            var room = _context.Rooms.Find(id);
+            if (room == null)
+            {
+                throw new KeyNotFoundException($"No room found with id: {id}");
+            }
+
+            return new RoomDto
+            {
+                Id = id,
+                Name = room.Name,
+                Description = room.Description,
+                Price = room.Price,
+                Days = room.Days,
+                Image = room.Image,
+                NumberOfBeds = room.NumberOfBeds,
+                GuestHouseId = room.GuestHouseId,
+                Amenities = _context.RoomAmenities.Where(e=>e.RoomId == room.Id).Select(e=>e.Amenities).ToList()?? null,
+            };
         }
     }
 }

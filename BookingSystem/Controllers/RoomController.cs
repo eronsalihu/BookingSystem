@@ -16,12 +16,18 @@ namespace BookingSystem.Controllers
             _roomService = roomService;
         }
 
-        [HttpGet("room")]
+        [HttpGet("roomsByGuestHouseId")]
         public async Task<IActionResult> GetRooms(int id)
         {
             return Ok(_roomService.GetRoomsByGuestHouseId(id).Result);
         }
 
+
+        [HttpGet("roomById")]
+        public async Task<RoomDto> GetRoomById(int id)
+        {
+            return _roomService.GetRoomById(id);
+        }
 
         [HttpPost("room")]
         public async Task<IActionResult> AddRoom([FromBody] List<RoomDto> roomDtos)
