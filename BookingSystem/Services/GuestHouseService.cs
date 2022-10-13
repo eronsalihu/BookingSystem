@@ -28,14 +28,14 @@ namespace BookingSystem.Services
             };
         }
 
-        public async Task<List<GuestHouseDto>> GetAllGuestHousesAsync()
-        {
-            return await _context.GuestHouses.Select(e => new GuestHouseDto
-            {
-                Id = e.Id,
-                Name = e.Name,
-                Description = e.Name
-            }).ToListAsync();
+		public async Task<List<GuestHouseDto>> GetAllGuestHousesAsync()
+		{
+			return await _context.GuestHouses.Select(e => new GuestHouseDto
+			{
+				Id = e.Id,
+				Name = e.Name,
+				Description = e.Description
+			}).ToListAsync();
 
         }
 
@@ -76,12 +76,12 @@ namespace BookingSystem.Services
                 throw new KeyNotFoundException($"No guesthouse found with id: {id}");
             }
 
-            return new GuestHouseDto
-            {
-                Id = guestHouse.Id,
-                Name = guestHouse.Name,
-                Description = guestHouse.Name
-            };
-        }
-    }
+			return new GuestHouseDto
+			{
+				Id = guestHouse.Id,
+				Name = guestHouse.Name,
+				Description = guestHouse.Description
+			};
+		}
+	}
 }
