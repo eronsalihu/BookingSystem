@@ -6,109 +6,108 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BookingSystem.Services
 {
-    public class RoomService : IRoomService
-    {
-        private readonly BookingContext _context;
+	public class RoomService : IRoomService
+	{
+		private readonly BookingContext _context;
 
-        public RoomService(BookingContext context)
-        {
-            _context = context;
-        }
+		public RoomService(BookingContext context)
+		{
+			_context = context;
+		}
 
-        public async Task<List<RoomDto>> AddRoomsAsync(List<Room> rooms)
-        {
-            foreach (var room in rooms)
-            {
-                await _context.Rooms.AddAsync(room);
-            }
+		public async Task<RoomDto> AddRoomsAsync(Room room)
+		{
+			await _context.Rooms.AddAsync(room);
 
-            await _context.SaveChangesAsync();
+			await _context.SaveChangesAsync();
 
-            return rooms.Select(e => new RoomDto
-            {
-                Id = e.Id,
-                Name = e.Name,
-                Image = e.Image,
-                Description = e.Description,
-                Price = e.Price, 
-                NumberOfBeds = e.NumberOfBeds,
-                GuestHouseId = e.GuestHouseId,
-                Amenities = e.Amenities.Select(a => a.Amenities).ToList()
-            }).ToList();
+			var roomDto = new RoomDto
+			{
+				Id = room.Id,
+				Name = room.Name,
+				Image = room.Image,
+				Description = room.Description,
+				Price = room.Price,
+				NumberOfBeds = room.NumberOfBeds,
+				GuestHouseId = room.GuestHouseId,
+				Amenities = room.Amenities.Select(a => a.Amenities).ToList()
+			};
 
-        }
+			return roomDto;
 
-        public async Task<RoomDto> UpdateRoomAsync(Room room)
-        {
-            if (await _context.Rooms.AsNoTracking().SingleOrDefaultAsync(e => e.Id == room.Id) == null)
-            {
-                throw new KeyNotFoundException($"No room found with id: {room.Id}");
-            }
+		}
 
-            _context.Rooms.Update(room);
-            await _context.SaveChangesAsync();
+		public async Task<RoomDto> UpdateRoomAsync(Room room)
+		{
+			if (await _context.Rooms.AsNoTracking().SingleOrDefaultAsync(e => e.Id == room.Id) == null)
+			{
+				throw new KeyNotFoundException($"No room found with id: {room.Id}");
+			}
 
-            return new RoomDto
-            {
-                Id = room.Id,
-                Name = room.Name,
-                Description = room.Description,
-                Image = room.Image,
-                Price = room.Price ,
-                NumberOfBeds = room.NumberOfBeds,
-                GuestHouseId = room.GuestHouseId,
-                Amenities = room.Amenities.Select(e => e.Amenities).ToList(),
-            };
-        } 
+			_context.Rooms.Update(room);
+			await _context.SaveChangesAsync();
 
-        public async Task<List<RoomDto>> GetRoomsByGuestHouseId(int guestHouseId)
-        {
-            return await _context.Rooms.Where(e => e.GuestHouseId == guestHouseId).Select(e => new RoomDto
-            {
-                Id = e.Id,
-                Name = e.Name,
-                Image = e.Image,
-                Description = e.Description,
-                Price = e.Price, 
-                NumberOfBeds = e.NumberOfBeds,
-                GuestHouseId = e.GuestHouseId,
-                Amenities = e.Amenities.Select(a => a.Amenities).ToList()
+			return new RoomDto
+			{
+				Id = room.Id,
+				Name = room.Name,
+				Description = room.Description,
+				Image = room.Image,
+				Price = room.Price,
+				NumberOfBeds = room.NumberOfBeds,
+				GuestHouseId = room.GuestHouseId,
+				Amenities = room.Amenities.Select(e => e.Amenities).ToList(),
+			};
+		}
 
-            }).ToListAsync();
-        }
+		public async Task<List<RoomDto>> GetRoomsByGuestHouseId(int guestHouseId)
+		{
+			return await _context.Rooms.Where(e => e.GuestHouseId == guestHouseId).Select(e => new RoomDto
+			{
+				Id = e.Id,
+				Name = e.Name,
+				Image = e.Image,
+				Description = e.Description,
+				Price = e.Price,
+				NumberOfBeds = e.NumberOfBeds,
+				GuestHouseId = e.GuestHouseId,
+				Amenities = e.Amenities.Select(a => a.Amenities).ToList()
 
-        public async void DeleteRoomAsync(int id)
-        {
-            var room = _context.Rooms.SingleOrDefault(e => e.Id == id);
+			}).ToListAsync();
+		}
 
-            if (room == null)
-            {
-                throw new KeyNotFoundException($"No room found with id: {id}");
-            }
-            _context.Rooms.Remove(room);
-            await _context.SaveChangesAsync();
-        }
+		public async void DeleteRoomAsync(int id)
+		{
+			var room = _context.Rooms.SingleOrDefault(e => e.Id == id);
 
-        public RoomDto GetRoomById(int id)
-        {
-            var room = _context.Rooms.Find(id);
-            if (room == null)
-            {
-                throw new KeyNotFoundException($"No room found with id: {id}");
-            }
+			if (room == null)
+			{
+				throw new KeyNotFoundException($"No room found with id: {id}");
+			}
+			_context.Rooms.Remove(room);
+			await _context.SaveChangesAsync();
+		}
 
-            return new RoomDto
-            {
-                Id = id,
-                Name = room.Name,
-                Description = room.Description,
-                Price = room.Price, 
-                Image = room.Image,
-                NumberOfBeds = room.NumberOfBeds,
-                GuestHouseId = room.GuestHouseId,
-                Amenities = _context.RoomAmenities.Where(e=>e.RoomId == room.Id).Select(e=>e.Amenities).ToList()?? null,
-            };
-        }
-           
-    }
+		public RoomDto GetRoomById(int id)
+		{
+			var room = _context.Rooms.Find(id);
+			if (room == null)
+			{
+				throw new KeyNotFoundException($"No room found with id: {id}");
+			}
+
+			return new RoomDto
+			{
+				Id = id,
+				Name = room.Name,
+				Description = room.Description,
+				Price = room.Price,
+				Image = room.Image,
+				NumberOfBeds = room.NumberOfBeds,
+				GuestHouseId = room.GuestHouseId,
+				Amenities = _context.RoomAmenities.Where(e => e.RoomId == room.Id).Select(e => e.Amenities).ToList() ?? null,
+			};
+		}
+
+	}
 }

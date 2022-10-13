@@ -22,7 +22,6 @@ namespace BookingSystem.Controllers
 			return Ok(_roomService.GetRoomsByGuestHouseId(id).Result);
 		}
 
-
 		[HttpGet("{id}")]
 		public async Task<RoomDto> GetRoomById(int id)
 		{
@@ -30,30 +29,25 @@ namespace BookingSystem.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> AddRoom([FromBody] List<RoomDto> roomDtos)
+		public async Task<IActionResult> AddRoom([FromBody] RoomDto roomDto)
 		{
-			var roomList = new List<Room>();
-			foreach (var roomDto in roomDtos)
+			var room = new Room
 			{
-				var room = new Room
+				Name = roomDto.Name,
+				Description = roomDto.Description,
+				Image = roomDto.Image,
+				Price = roomDto.Price,
+				NumberOfBeds = roomDto.NumberOfBeds,
+				CreatedBy = GetCurrentUser(),
+				GuestHouseId = roomDto.GuestHouseId,
+				Amenities = roomDto.Amenities.Select(e => new RoomAmenity
 				{
-					Name = roomDto.Name,
-					Description = roomDto.Description,
-					Image = roomDto.Image,
-					Price = roomDto.Price,
-					NumberOfBeds = roomDto.NumberOfBeds,
-					CreatedBy = GetCurrentUser(),
-					GuestHouseId = roomDto.GuestHouseId,
-					Amenities = roomDto.Amenities.Select(e => new RoomAmenity
-					{
-						Amenities = e
-					}).ToList() ?? null,
+					Amenities = e
+				}).ToList() ?? null,
 
-				};
-				roomList.Add(room);
-			}
+			};
 
-			return Ok(await _roomService.AddRoomsAsync(roomList));
+			return Ok(await _roomService.AddRoomsAsync(room));
 		}
 
 		[HttpPut("{id}")]
@@ -82,8 +76,7 @@ namespace BookingSystem.Controllers
 			return Ok(updatedRoom.Result);
 		}
 
-
-		[HttpDelete("room")]
+		[HttpDelete("{id}")]
 		public void DeleteRoom(int id) =>
 			 _roomService.DeleteRoomAsync(id);
 	}
