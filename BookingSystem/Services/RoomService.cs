@@ -30,8 +30,7 @@ namespace BookingSystem.Services
                 Name = e.Name,
                 Image = e.Image,
                 Description = e.Description,
-                Price = e.Price,
-                Days = e.Days,
+                Price = e.Price, 
                 NumberOfBeds = e.NumberOfBeds,
                 GuestHouseId = e.GuestHouseId,
                 Amenities = e.Amenities.Select(a => a.Amenities).ToList()
@@ -55,40 +54,12 @@ namespace BookingSystem.Services
                 Name = room.Name,
                 Description = room.Description,
                 Image = room.Image,
-                Price = room.Price,
-                Days = room.Days,
+                Price = room.Price ,
                 NumberOfBeds = room.NumberOfBeds,
                 GuestHouseId = room.GuestHouseId,
                 Amenities = room.Amenities.Select(e => e.Amenities).ToList(),
             };
-        }
-
-        public async Task<RoomDto> AddImage(int id, byte[] encodedImage)
-        {
-            var room = _context.Rooms.Where(e => e.Id == id).FirstOrDefault();
-
-            if (room == null)
-            {
-                throw new KeyNotFoundException($"No room found with id: {id}");
-            }
-
-            room.Image = encodedImage;
-            _context.Rooms.Update(room);
-            await _context.SaveChangesAsync();
-
-            return new RoomDto
-            {
-                Id = id,
-                Name = room.Name,
-                Description = room.Description,
-                Price = room.Price,
-                Days = room.Days,
-                Image = room.Image,
-                NumberOfBeds = room.NumberOfBeds,
-                GuestHouseId = room.GuestHouseId,
-                Amenities = room.Amenities.Select(e => e.Amenities).ToList(),
-            };
-        }
+        } 
 
         public async Task<List<RoomDto>> GetRoomsByGuestHouseId(int guestHouseId)
         {
@@ -98,8 +69,7 @@ namespace BookingSystem.Services
                 Name = e.Name,
                 Image = e.Image,
                 Description = e.Description,
-                Price = e.Price,
-                Days = e.Days,
+                Price = e.Price, 
                 NumberOfBeds = e.NumberOfBeds,
                 GuestHouseId = e.GuestHouseId,
                 Amenities = e.Amenities.Select(a => a.Amenities).ToList()
@@ -132,13 +102,13 @@ namespace BookingSystem.Services
                 Id = id,
                 Name = room.Name,
                 Description = room.Description,
-                Price = room.Price,
-                Days = room.Days,
+                Price = room.Price, 
                 Image = room.Image,
                 NumberOfBeds = room.NumberOfBeds,
                 GuestHouseId = room.GuestHouseId,
                 Amenities = _context.RoomAmenities.Where(e=>e.RoomId == room.Id).Select(e=>e.Amenities).ToList()?? null,
             };
         }
+           
     }
 }

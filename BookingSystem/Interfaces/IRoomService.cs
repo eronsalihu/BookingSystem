@@ -8,8 +8,7 @@ namespace BookingSystem.Interfaces
         Task<List<RoomDto>> GetRoomsByGuestHouseId(int guestHouseId);
         RoomDto GetRoomById(int id);
         Task<List<RoomDto>> AddRoomsAsync(List<Room> rooms);
-        Task<RoomDto> UpdateRoomAsync(Room room);
-        Task<RoomDto> AddImage(int id, byte[] encodedImage);
+        Task<RoomDto> UpdateRoomAsync(Room room); 
         void DeleteRoomAsync(int id);
     }
 }

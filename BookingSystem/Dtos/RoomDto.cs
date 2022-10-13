@@ -17,10 +17,7 @@ namespace BookingSystem.Dtos
         public byte[] Image { get; set; }
 
         [Required]
-        public decimal Price { get; set; }
-
-        [Required]
-        public int Days { get; set; }
+        public decimal Price { get; set; } 
 
         [Required]
         public int NumberOfBeds { get; set; }

@@ -39,8 +39,8 @@ namespace BookingSystem.Controllers
                 {
                     Name = roomDto.Name,
                     Description = roomDto.Description,
+                    Image = roomDto.Image,
                     Price = roomDto.Price,
-                    Days = roomDto.Days,
                     NumberOfBeds = roomDto.NumberOfBeds,
                     CreatedBy = GetCurrentUser(),
                     GuestHouseId = roomDto.GuestHouseId,
@@ -66,7 +66,6 @@ namespace BookingSystem.Controllers
                 Image = roomDto.Image,
                 Description = roomDto.Description,
                 Price = roomDto.Price,
-                Days = roomDto.Days,
                 NumberOfBeds = roomDto.NumberOfBeds,
                 CreatedBy = GetCurrentUser(),
                 GuestHouseId = roomDto.GuestHouseId,
@@ -83,15 +82,6 @@ namespace BookingSystem.Controllers
             return Ok(updatedRoom.Result);
         }
 
-        [HttpPost("uploadImage")]
-        public async Task<IActionResult> UploadImage(int id, [FromBody] byte[] image)
-        {
-            var roomImage = await _roomService.AddImage(id, image);
-
-            if (roomImage == null) return BadRequest(new ApiException(404, "Couldn't add image"));
-
-            return Ok(roomImage);
-        }
 
         [HttpDelete("room")]
         public void DeleteRoom(int id) =>

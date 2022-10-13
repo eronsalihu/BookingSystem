@@ -31,7 +31,7 @@ namespace BookingSystem.Extensions
                     var errors = actionContext.ModelState
                         .Where(e => e.Value.Errors.Count > 0)
                         .SelectMany(x => x.Value.Errors)
-                        .Select(x => x.ErrorMessage).ToArray();
+                        .Select(x => x.ErrorMessage.ToString()).ToArray();
 
                     var errorResponse = new ApiValidationErrorResponse
                     {
