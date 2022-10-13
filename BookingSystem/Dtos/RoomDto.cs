@@ -5,6 +5,8 @@ namespace BookingSystem.Dtos
 {
     public class RoomDto
     {
+        public int Id { get; set; }
+
         [Required]
         public string Name { get; set; }
 

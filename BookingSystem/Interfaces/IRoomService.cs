@@ -5,9 +5,10 @@ namespace BookingSystem.Interfaces
 {
     public interface IRoomService
     {
-        Task<List<object>> AddRoomsAsync(List<Room> rooms);
-        Task<object> UpdateRoomAsync(Room room);
-        Task<object> AddImage(int id, byte[] encodedImage);
+        Task<List<RoomDto>> GetRoomsByGuestHouseId(int guestHouseId);
+        Task<List<RoomDto>> AddRoomsAsync(List<Room> rooms);
+        Task<RoomDto> UpdateRoomAsync(Room room);
+        Task<RoomDto> AddImage(int id, byte[] encodedImage);
         void DeleteRoomAsync(int id);
     }
 }

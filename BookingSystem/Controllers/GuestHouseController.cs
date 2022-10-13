@@ -2,66 +2,65 @@
 using BookingSystem.Entities;
 using BookingSystem.Interfaces;
 using BookingSystem.Utils;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookingSystem.Controllers
 {
-	public class GuestHouseController : BaseApiController
-	{
-		private IGuestHouseService _guestHouseService;
+    public class GuestHouseController : BaseApiController
+    {
+        private IGuestHouseService _guestHouseService;
 
-		public GuestHouseController(IGuestHouseService guestHouseService)
-		{
-			_guestHouseService = guestHouseService;
-		}
+        public GuestHouseController(IGuestHouseService guestHouseService)
+        {
+            _guestHouseService = guestHouseService;
+        }
 
-		[HttpGet("guest-house")]
-		public async Task<ActionResult<List<GuestHouseDto>>> GetGuestHouses()
-		{
-			return await _guestHouseService.GetAllGuestHousesAsync();
-		}
+        [HttpGet("guest-house")]
+        public async Task<ActionResult<List<GuestHouseDto>>> GetGuestHouses()
+        {
+            return await _guestHouseService.GetAllGuestHousesAsync();
+        }
 
-		[HttpGet("guest-house/{id}")]
-		public ActionResult<GuestHouseDto> GetGuestHouseById(int id)
-		{
-			return _guestHouseService.GetGuestHousesById(id);
-		}
+        [HttpGet("guest-house/{id}")]
+        public ActionResult<GuestHouseDto> GetGuestHouseById(int id)
+        {
+            return _guestHouseService.GetGuestHousesById(id);
+        }
 
-		[HttpPost("guest-house")]
-		public async Task<IActionResult> AddGuestHouse(GuestHouseDto guestHouseDto)
-		{
-			var guestHouse = new GuestHouse
-			{
-				Name = guestHouseDto.Name,
-				Description = guestHouseDto.Description,
-				CreatedBy = GetCurrentUser(),
-			};
+        [HttpPost("guest-house")]
+        public async Task<IActionResult> AddGuestHouse(GuestHouseDto guestHouseDto)
+        {
+            var guestHouse = new GuestHouse
+            {
+                Name = guestHouseDto.Name,
+                Description = guestHouseDto.Description,
+                CreatedBy = GetCurrentUser(),
+            };
 
-			return Ok(await _guestHouseService.AddGuestHouseAsync(guestHouse));
-		}
+            return Ok(await _guestHouseService.AddGuestHouseAsync(guestHouse));
+        }
 
-		[HttpPut("guest-house")]
-		public async Task<IActionResult> UpdateGuestHouse(int id, GuestHouseDto guestHouseDto)
-		{
-			var guestHouse = new GuestHouse
-			{
-				Id = id,
-				Name = guestHouseDto.Name,
-				Description = guestHouseDto.Description,
-				CreatedBy = GetCurrentUser(),
-			};
+        [HttpPut("guest-house")]
+        public async Task<IActionResult> UpdateGuestHouse(int id, GuestHouseDto guestHouseDto)
+        {
+            var guestHouse = new GuestHouse
+            {
+                Id = id,
+                Name = guestHouseDto.Name,
+                Description = guestHouseDto.Description,
+                CreatedBy = GetCurrentUser(),
+            };
 
-			var ghUpdate = await _guestHouseService.UpdateGuestHouseAsync(guestHouse);
+            var ghUpdate = await _guestHouseService.UpdateGuestHouseAsync(guestHouse);
 
-			if (ghUpdate == null)
-				return NotFound(new ApiResponse(404, "Guest House not found"));
+            if (ghUpdate == null)
+                return NotFound(new ApiResponse(404, "Guest House not found"));
 
-			return Ok(ghUpdate);
-		}
+            return Ok(ghUpdate);
+        }
 
-		[HttpDelete("guest-house")]
-		public void DeleteGuestHouse(int id) =>
-			  _guestHouseService.DeleteGuestHouseAsync(id);
-	}
+        [HttpDelete("guest-house")]
+        public void DeleteGuestHouse(int id) =>
+              _guestHouseService.DeleteGuestHouseAsync(id);
+    }
 }
