@@ -17,14 +17,14 @@ namespace BookingSystem.Controllers
             _bookingService = bookingService;
         }
 
-        [HttpPost("book")]
-        public async Task<IActionResult> AddBooking(int id, BookDto bookDto)
+        [HttpPost]
+        public async Task<IActionResult> AddBooking(BookDto bookDto)
         {
             var book = new Book
             {
-                Id = id,
                 BookFrom = bookDto.BookFrom,
                 BookTo = bookDto.BookTo,
+                GuestHouseId = bookDto.GuestHouseId,
                 CreatedBy = GetCurrentUser()
             };
             var addedBook = await _bookingService.AddBookAsync(book);
@@ -33,7 +33,7 @@ namespace BookingSystem.Controllers
             return Ok(addedBook);
         }
 
-        [HttpGet("bookings")]
+        [HttpGet("GuestHouse/{id}")]
         public async Task<List<BookDto>> GetBookedDays(int id) =>
            await _bookingService.GetBookedGuestHousePerDays(id);
     }
