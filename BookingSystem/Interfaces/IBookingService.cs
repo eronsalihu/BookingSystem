@@ -5,7 +5,9 @@ namespace BookingSystem.Interfaces
 {
     public interface IBookingService
     {
+        Task<IEnumerable<BookDto>> GetBookingsAsync();
         Task<BookDto> AddBookAsync(Book book);
-        Task<List<BookDto>> GetBookedGuestHousePerDays(int id);
+        Task<IEnumerable<BookDto>> GetBookedGuestHousePerDays(int id);
+        Task<BookDto> GetBookingByIdAsync(int id);
     }
 }

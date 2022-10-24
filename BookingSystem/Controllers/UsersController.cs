@@ -1,6 +1,5 @@
 ﻿using BookingSystem.Entities;
 using BookingSystem.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookingSystem.Controllers

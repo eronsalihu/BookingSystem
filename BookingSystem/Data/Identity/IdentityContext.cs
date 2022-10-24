@@ -1,5 +1,4 @@
 ﻿using BookingSystem.Entities;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,9 +11,9 @@ namespace BookingSystem.Data.Identity
         }
 
         protected override void OnModelCreating(ModelBuilder builder)
-        { 
+        {
             base.OnModelCreating(builder);
         }
-        
+
     }
 }

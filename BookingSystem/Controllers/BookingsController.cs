@@ -8,14 +8,22 @@ using Microsoft.AspNetCore.Mvc;
 namespace BookingSystem.Controllers
 {
     [Authorize]
-    public class BookController : BaseApiController
+    public class BookingsController : BaseApiController
     {
         private readonly IBookingService _bookingService;
 
-        public BookController(IBookingService bookingService)
+        public BookingsController(IBookingService bookingService)
         {
             _bookingService = bookingService;
         }
+
+        [HttpGet]
+        public async Task<IEnumerable<BookDto>> GetBookings() =>
+            await _bookingService.GetBookingsAsync();
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetBookingById(int id) =>
+            Ok(await _bookingService.GetBookingByIdAsync(id));
 
         [HttpPost]
         public async Task<IActionResult> AddBooking(BookDto bookDto)
@@ -34,7 +42,7 @@ namespace BookingSystem.Controllers
         }
 
         [HttpGet("GuestHouse/{id}")]
-        public async Task<List<BookDto>> GetBookedDays(int id) =>
+        public async Task<IEnumerable<BookDto>> GetBookedDays(int id) =>
            await _bookingService.GetBookedGuestHousePerDays(id);
     }
 }
