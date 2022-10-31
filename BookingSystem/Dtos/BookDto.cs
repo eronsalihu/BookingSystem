@@ -2,7 +2,7 @@
 {
     public class BookDto
     {
-        public int GuestHouseId { get; set; }
+        public int RoomId { get; set; }
         public DateTime BookFrom { get; set; }
         public DateTime BookTo { get; set; }
     }

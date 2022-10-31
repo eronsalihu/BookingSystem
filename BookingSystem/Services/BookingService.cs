@@ -1,6 +1,5 @@
 ﻿using BookingSystem.Data;
 using BookingSystem.Dtos;
-using BookingSystem.Entities;
 using BookingSystem.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,31 +13,18 @@ namespace BookingSystem.Services
         {
             _context = context;
         }
-        public async Task<BookDto> AddBookAsync(Book book)
+
+
+        public async Task<List<BookDto>> GetBookedGuestHouesPerDays(int id)
         {
-            if (await _context.GuestHouses.SingleOrDefaultAsync(e => e.Id == book.GuestHouseId) == null)
-            {
 
-                throw new KeyNotFoundException($"No guesthouse found with id: {book.GuestHouseId}");
-
-            }
-            await _context.AddAsync(book);
-            await _context.SaveChangesAsync();
-            return new BookDto
+            return await _context.Bookings.Where(e => e.Room.GuestHouseId == id).Select(e => new BookDto
             {
-                GuestHouseId = book.GuestHouseId,
-                BookFrom = book.BookFrom,
-                BookTo = book.BookTo
-            };
-        }
-
-        public async Task<List<BookDto>> GetBookedGuestHousePerDays(int id) =>
-            await _context.Bookings.Where(e => e.GuestHouseId == id).Select(e => new BookDto
-            {
-                GuestHouseId = e.GuestHouseId,
+                RoomId = e.RoomId,
                 BookFrom = e.BookFrom,
                 BookTo = e.BookTo,
             }).ToListAsync();
+        }
 
     }
 }

@@ -1,35 +1,32 @@
-﻿using BookingSystem.Entities;
-using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 namespace BookingSystem.Controllers
 {
-	[EnableCors("CorsPolicy")]
-	[Route("api/[controller]")]
-	[ApiController]
+    [EnableCors("CorsPolicy")]
+    [Route("api/[controller]")]
+    [ApiController]
 
-	public class BaseApiController : ControllerBase
-	{
-		[NonAction]
-		public string GetCurrentUser() =>
-			 HttpContext.User.FindFirstValue(ClaimTypes.Name);
+    public class BaseApiController : ControllerBase
+    {
+        [NonAction]
+        public string GetCurrentUser() =>
+             HttpContext.User.FindFirstValue(ClaimTypes.Name);
 
-		[NonAction]
-		public byte[] ConvertToBase64(IFormFile file)
-		{
-			if (file.Length > 0)
-			{
-				using (var ms = new MemoryStream())
-				{
-					file.CopyTo(ms);
-					return ms.ToArray();
+        [NonAction]
+        public byte[] ConvertToBase64(IFormFile file)
+        {
+            if (file.Length > 0)
+            {
+                using (var ms = new MemoryStream())
+                {
+                    file.CopyTo(ms);
+                    return ms.ToArray();
 
-				}
-			}
-			return null;
-		}
-	}
+                }
+            }
+            return null;
+        }
+    }
 }

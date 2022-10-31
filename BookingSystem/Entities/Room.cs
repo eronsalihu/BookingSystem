@@ -13,5 +13,6 @@
         public GuestHouse GuestHouse { get; set; }
         public int GuestHouseId { get; set; }
         public virtual ICollection<RoomAmenity> Amenities { get; set; }
+        public ICollection<Book> Books { get; set; }
     }
 }

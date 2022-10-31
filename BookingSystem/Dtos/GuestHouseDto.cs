@@ -1,9 +1,8 @@
-﻿using BookingSystem.Entities;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 namespace BookingSystem.Dtos
 {
     public class GuestHouseDto
-    { 
+    {
         public int Id { get; set; }
 
         [Required]
