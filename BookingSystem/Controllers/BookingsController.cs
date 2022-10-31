@@ -5,18 +5,18 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BookingSystem.Controllers
 {
-    [Authorize]
-    public class BookingsController : BaseApiController
-    {
-        private readonly IBookingService _bookingService;
+	[Authorize]
+	public class BookingsController : BaseApiController
+	{
+		private readonly IBookingService _bookingService;
 
-        public BookingsController(IBookingService bookingService)
-        {
-            _bookingService = bookingService;
-        }
+		public BookingsController(IBookingService bookingService)
+		{
+			_bookingService = bookingService;
+		}
 
-        [HttpGet("GuestHouse/{id}")]
-        public async Task<List<BookDto>> GetBookedDays(int id) =>
-           await _bookingService.GetBookedGuestHouesPerDays(id);
-    }
+		[HttpGet("{id}")]
+		public async Task<List<BookDto>> GetBookedDays(int id) =>
+		   await _bookingService.GetBookedGuestHouesPerDays(id);
+	}
 }
