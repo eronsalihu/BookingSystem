@@ -116,6 +116,7 @@ namespace BookingSystem.Services
 
             return new BookDto
             {
+                Id = book.Id,
                 RoomId = book.RoomId,
                 BookFrom = book.BookFrom,
                 BookTo = book.BookTo,
