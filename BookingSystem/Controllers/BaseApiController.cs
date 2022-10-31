@@ -13,20 +13,5 @@ namespace BookingSystem.Controllers
         [NonAction]
         public string GetCurrentUser() =>
              HttpContext.User.FindFirstValue(ClaimTypes.Name);
-
-        [NonAction]
-        public byte[] ConvertToBase64(IFormFile file)
-        {
-            if (file.Length > 0)
-            {
-                using (var ms = new MemoryStream())
-                {
-                    file.CopyTo(ms);
-                    return ms.ToArray();
-
-                }
-            }
-            return null;
-        }
     }
 }

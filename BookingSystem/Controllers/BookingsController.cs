@@ -6,11 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 namespace BookingSystem.Controllers
 {
     [Authorize]
-    public class BookController : BaseApiController
+    public class BookingsController : BaseApiController
     {
         private readonly IBookingService _bookingService;
 
-        public BookController(IBookingService bookingService)
+        public BookingsController(IBookingService bookingService)
         {
             _bookingService = bookingService;
         }

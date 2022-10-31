@@ -24,6 +24,7 @@ namespace BookingSystem.Extensions
             services.AddScoped<IGuestHouseService, GuestHouseService>();
             services.AddScoped<IRoomService, RoomService>();
             services.AddScoped<IBookingService, BookingService>();
+            services.AddScoped<IUserService, UserService>();
             services.Configure<ApiBehaviorOptions>(options =>
             {
                 options.InvalidModelStateResponseFactory = actionContext =>
