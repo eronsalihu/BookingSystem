@@ -26,5 +26,14 @@ namespace BookingSystem.Services
                 BookTo = e.BookTo,
             }).ToListAsync();
         }
+
+        public async Task<List<BookDto>> GetBookingsByUserId(string userId) =>
+            await _context.Bookings.Where(e => e.CreatedBy == userId).Select(e => new BookDto
+            {
+                Id = e.Id,
+                RoomId = e.RoomId,
+                BookFrom = e.BookFrom,
+                BookTo = e.BookTo
+            }).ToListAsync();
     }
 }

@@ -28,15 +28,26 @@ namespace BookingSystem.Services
             };
         }
 
-        public async Task<List<GuestHouseDto>> GetAllGuestHousesAsync()
+        public async Task<List<GuestHouseDto>> GetAllGuestHousesAsync(string? checkIn, string? checkOut, int numberOfBeds)
         {
-            return await _context.GuestHouses.Select(e => new GuestHouseDto
-            {
-                Id = e.Id,
-                Name = e.Name,
-                Description = e.Description
-            }).ToListAsync();
-
+            return await (from gh in _context.GuestHouses
+                          join r in _context.Rooms on gh.Id equals r.GuestHouseId
+                          join b in _context.Bookings on r.Id equals b.RoomId
+                          where
+                          b.BookFrom.Date >= (checkIn == null
+                          ? b.BookFrom.Date
+                          : DateTime.ParseExact(checkIn, "dd/MM/yyyy", null).Date)
+                          &&
+                          b.BookTo <= (checkOut == null
+                          ? b.BookTo
+                          : DateTime.ParseExact(checkOut, "dd/MM/yyyy", null).Date)
+                          && r.NumberOfBeds == numberOfBeds
+                          select new GuestHouseDto
+                          {
+                              Id = gh.Id,
+                              Name = gh.Name,
+                              Description = gh.Description
+                          }).Distinct().ToListAsync();
         }
 
         public async Task<GuestHouseDto> UpdateGuestHouseAsync(GuestHouse guestHouse)
@@ -82,6 +93,30 @@ namespace BookingSystem.Services
                 Name = guestHouse.Name,
                 Description = guestHouse.Description
             };
+        }
+
+        public async Task<List<GuestHouseDto>> GetTopFiveBookedGuestHoues()
+        {
+            var guestHouses = await (from gh in _context.GuestHouses
+                                     join r in _context.Rooms on gh.Id equals r.GuestHouseId
+                                     join b in _context.Bookings on r.Id equals b.RoomId
+                                     group gh by gh.Id into g
+                                     select new
+                                     {
+                                         Id = g.Key,
+                                         Name = g.Select(e => e.Name).FirstOrDefault(),
+                                         Description = g.Select(e => e.Description).FirstOrDefault(),
+                                         Count = g.Count()
+                                     }).OrderByDescending(t => t.Count).Take(5).ToListAsync();
+
+            return guestHouses.Select(e => new GuestHouseDto
+            {
+                Id = e.Id,
+                Name = e.Name,
+                Description = e.Description
+            }).ToList();
+
+
         }
     }
 }
