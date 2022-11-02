@@ -17,7 +17,7 @@ namespace BookingSystem.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<GuestHouseDto>>> GetGuestHouses(string? checkIn, string? checkOut, int numberOfBeds)
+        public async Task<ActionResult<List<GuestHouseDto>>> GetGuestHouses(DateTime? checkIn, DateTime? checkOut, int? numberOfBeds)
         {
             return await _guestHouseService.GetAllGuestHousesAsync(checkIn, checkOut, numberOfBeds);
         }

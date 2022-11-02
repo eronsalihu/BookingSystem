@@ -5,7 +5,7 @@ namespace BookingSystem.Interfaces
 {
     public interface IGuestHouseService
     {
-        Task<List<GuestHouseDto>> GetAllGuestHousesAsync(string? checkIn, string? checkOut, int numberOfBeds);
+        Task<List<GuestHouseDto>> GetAllGuestHousesAsync(DateTime? checkIn, DateTime? checkOut, int? numberOfBeds);
         GuestHouseDto GetGuestHousesById(int id);
         Task<GuestHouseDto> AddGuestHouseAsync(GuestHouse guestHouse);
         Task<GuestHouseDto> UpdateGuestHouseAsync(GuestHouse guestHouse);
