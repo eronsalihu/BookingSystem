@@ -79,14 +79,15 @@ namespace BookingSystem.Controllers
         public void DeleteRoom(int id) =>
              _roomService.DeleteRoomAsync(id);
 
-        [HttpPost("{id}/Book")]
-        public async Task<IActionResult> BookRoom(int id, [FromBody] BookDto bookDto)
+        [HttpPost("book")]
+        public async Task<IActionResult> BookRoom([FromBody] BookDto bookDto)
         {
             var book = new Book
             {
-                RoomId = id,
+                RoomId = bookDto.Id,
                 BookFrom = bookDto.BookFrom,
                 BookTo = bookDto.BookTo,
+                CreatedBy = GetCurrentUser(),
             };
 
             return Ok(await _roomService.BookRoomAsync(book));
