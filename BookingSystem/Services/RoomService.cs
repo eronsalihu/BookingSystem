@@ -76,7 +76,7 @@ namespace BookingSystem.Services
             }).ToListAsync();
         }
 
-        public async void DeleteRoomAsync(int id)
+        public void DeleteRoomAsync(int id)
         {
             var room = _context.Rooms.SingleOrDefault(e => e.Id == id);
 
@@ -85,7 +85,7 @@ namespace BookingSystem.Services
                 throw new KeyNotFoundException($"No room found with id: {id}");
             }
             _context.Rooms.Remove(room);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
 
         public RoomDto GetRoomById(int id)

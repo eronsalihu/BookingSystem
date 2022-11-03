@@ -4,7 +4,6 @@ using BookingSystem.Dtos;
 using BookingSystem.Entities;
 using BookingSystem.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 
 namespace BookingSystem.Services
 {
@@ -32,18 +31,16 @@ namespace BookingSystem.Services
         public async Task<List<GuestHouseDto>> GetAllGuestHousesAsync(DateTime? checkIn, DateTime? checkOut, int? numberOfBeds)
         {
             return await (from gh in _context.GuestHouses
-                          join r in _context.Rooms on gh.Id equals r.GuestHouseId
-                          join b in _context.Bookings on r.Id equals b.RoomId into grouping
-                          from result in grouping.DefaultIfEmpty()
+                          join r in _context.Rooms on gh.Id equals r.GuestHouseId into roomLeft
+                          from rooms in roomLeft.DefaultIfEmpty()
+                          join b in _context.Bookings on rooms.Id equals b.RoomId into bookingLeft
+                          from bookings in bookingLeft.DefaultIfEmpty()
                           where
-                          result.BookFrom >= (checkIn == null
-                          ? result.BookFrom
-                          : checkIn)
+                          (checkIn != null ? bookings.BookFrom.Date >= checkIn.Value.Date : true)
                           &&
-                          result.BookTo <= (checkOut == null
-                          ? result.BookTo
-                          : checkOut)
-                          && r.NumberOfBeds == (numberOfBeds ?? r.NumberOfBeds)
+                          (checkOut != null ? bookings.BookTo.Date <= checkOut.Value.Date : true)
+                          &&
+                          (numberOfBeds != null ? rooms.NumberOfBeds == numberOfBeds : true)
                           select new GuestHouseDto
                           {
                               Id = gh.Id,
