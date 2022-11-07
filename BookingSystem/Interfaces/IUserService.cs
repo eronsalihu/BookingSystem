@@ -1,4 +1,5 @@
-﻿using BookingSystem.Entities;
+﻿using BookingSystem.Dtos;
+using BookingSystem.Entities;
 
 namespace BookingSystem.Interfaces
 {
@@ -6,5 +7,6 @@ namespace BookingSystem.Interfaces
     {
         Task<IEnumerable<User>> GetUsersAsync();
         Task<User> GetUserByIdAsync(string id);
+        User UpdateUser(User user);
     }
 }

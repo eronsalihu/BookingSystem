@@ -1,4 +1,5 @@
 ﻿using BookingSystem.Data.Identity;
+using BookingSystem.Dtos;
 using BookingSystem.Entities;
 using BookingSystem.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -19,5 +20,12 @@ namespace BookingSystem.Services
 
         public async Task<IEnumerable<User>> GetUsersAsync() =>
             await _context.Users.ToListAsync();
+        public  User UpdateUser(User user)
+        {
+            _context.Users.Update(user);
+            _context.SaveChanges();
+            return user;
+        }
+
     }
 }
