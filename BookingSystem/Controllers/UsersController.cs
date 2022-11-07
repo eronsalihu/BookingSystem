@@ -1,5 +1,4 @@
-﻿using BookingSystem.Dtos;
-using BookingSystem.Entities;
+﻿using BookingSystem.Entities;
 using BookingSystem.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -28,6 +27,6 @@ namespace BookingSystem.Controllers
         {
             user.Id = id;
             return Ok(_userService.UpdateUser(user));
-        } 
+        }
     }
 }

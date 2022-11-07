@@ -1,5 +1,4 @@
-﻿using BookingSystem.Dtos;
-using BookingSystem.Entities;
+﻿using BookingSystem.Entities;
 
 namespace BookingSystem.Interfaces
 {
