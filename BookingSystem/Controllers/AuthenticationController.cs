@@ -37,6 +37,7 @@ namespace BookingSystem.Controllers
 
 			return new UserDto
 			{
+				Id = user.Id,
 				Username = user.UserName,
 				Role = user.Role,
 				Email = user.Email,
