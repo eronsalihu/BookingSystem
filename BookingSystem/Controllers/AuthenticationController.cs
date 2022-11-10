@@ -24,7 +24,7 @@ namespace BookingSystem.Controllers
 		}
 
 
-		[HttpPost("login")]
+		[HttpPost("Login")]
 		public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
 		{
 			var user = await _userManager.FindByEmailAsync(loginDto.Email);
@@ -46,7 +46,7 @@ namespace BookingSystem.Controllers
 
 		}
 
-		[HttpPost("register")]
+		[HttpPost("Register")]
 		public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
 		{
 			if (await CheckEmailExistsAsync(registerDto.Email))

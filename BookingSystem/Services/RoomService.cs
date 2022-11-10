@@ -43,6 +43,11 @@ namespace BookingSystem.Services
             {
                 throw new KeyNotFoundException($"No room found with id: {room.Id}");
             }
+            var roomAmenities = await _context.RoomAmenities.Where(e => e.RoomId == room.Id).ToListAsync();
+
+            var except = roomAmenities.Except(room.Amenities);
+
+            _context.RemoveRange(except);
 
             _context.Rooms.Update(room);
             await _context.SaveChangesAsync();

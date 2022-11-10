@@ -19,7 +19,7 @@ namespace BookingSystem.Controllers
         public async Task<List<BookDto>> GetBookedDays(int id) =>
            await _bookingService.GetBookedGuestHouesPerDays(id);
 
-        [HttpGet("user/{id}")]
+        [HttpGet("User/{id}")]
         public async Task<List<BookDto>> GetBookingsByUserId(string id) =>
            await _bookingService.GetBookingsByUserId(id);
     }

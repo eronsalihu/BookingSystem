@@ -81,12 +81,12 @@ namespace BookingSystem.Controllers
         public void DeleteRoom(int id) =>
                      _roomService.DeleteRoomAsync(id);
         [Authorize]
-        [HttpPost("book")]
+        [HttpPost("Book")]
         public async Task<IActionResult> BookRoom([FromBody] BookDto bookDto)
         {
             var book = new Book
             {
-                RoomId = bookDto.Id,
+                RoomId = bookDto.RoomId,
                 BookFrom = bookDto.BookFrom,
                 BookTo = bookDto.BookTo,
                 CreatedBy = GetCurrentUser(),
