@@ -18,7 +18,7 @@ namespace BookingSystem.Services
         public async Task<List<BookDto>> GetBookedGuestHouesPerDays(int id)
         {
 
-            return await _context.Bookings.Where(e => e.Room.GuestHouseId == id).Select(e => new BookDto
+            return await _context.Bookings.Where(e => e.Room.Id == id).Select(e => new BookDto
             {
                 Id = e.Id,
                 RoomId = e.RoomId,
