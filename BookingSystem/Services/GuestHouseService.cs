@@ -36,9 +36,9 @@ namespace BookingSystem.Services
                           join b in _context.Bookings on rooms.Id equals b.RoomId into bookingLeft
                           from bookings in bookingLeft.DefaultIfEmpty()
                           where
-                          (checkIn != null ? bookings.BookFrom.Date >= checkIn.Value.Date : true)
+                          (checkIn != null ? bookings.BookFrom.Date <= checkIn.Value.Date : true)
                           &&
-                          (checkOut != null ? bookings.BookTo.Date <= checkOut.Value.Date : true)
+                          (checkOut != null ? bookings.BookTo.Date >= checkOut.Value.Date : true)
                           &&
                           (numberOfBeds != null ? rooms.NumberOfBeds == numberOfBeds : true)
                           select new GuestHouseDto
