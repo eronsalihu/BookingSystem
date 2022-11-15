@@ -3,6 +3,7 @@ using BookingSystem.Data.Identity;
 using BookingSystem.Dtos;
 using BookingSystem.Entities;
 using BookingSystem.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookingSystem.Services
@@ -36,9 +37,10 @@ namespace BookingSystem.Services
                           join b in _context.Bookings on rooms.Id equals b.RoomId into bookingLeft
                           from bookings in bookingLeft.DefaultIfEmpty()
                           where
-                          (checkIn != null ? bookings.BookFrom.Date <= checkIn.Value.Date : true)
+                          (checkIn != null ? (bookings.BookTo.Date < checkIn.Value.Date
+                          && checkIn.Value.Date >= DateTime.Now) || gh.Rooms.Any(e => !e.Books.Any()) : true)
                           &&
-                          (checkOut != null ? bookings.BookTo.Date >= checkOut.Value.Date : true)
+                          (checkOut != null ? bookings.BookFrom.Date < checkOut.Value.Date : true)
                           &&
                           (numberOfBeds != null ? rooms.NumberOfBeds == numberOfBeds : true)
                           select new GuestHouseDto
