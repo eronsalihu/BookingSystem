@@ -1,5 +1,6 @@
 ﻿using BookingSystem.Data;
 using BookingSystem.Dtos;
+using BookingSystem.Entities;
 using BookingSystem.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,17 +16,9 @@ namespace BookingSystem.Services
         }
 
 
-        public async Task<List<BookDto>> GetBookedGuestHouesPerDays(int id)
-        {
+        public async Task<List<Book>> GetBookedGuestHouesPerDays(int id) =>
+            await _context.Bookings.Include(e => e.Room).Where(e => e.Room.Id == id).ToListAsync();
 
-            return await _context.Bookings.Where(e => e.Room.Id == id).Select(e => new BookDto
-            {
-                Id = e.Id,
-                RoomId = e.RoomId,
-                BookFrom = e.BookFrom,
-                BookTo = e.BookTo,
-            }).ToListAsync();
-        }
 
         public async Task<List<BookDto>> GetBookingsByUserId(string userId) =>
             await _context.Bookings.Where(e => e.CreatedBy == userId).Select(e => new BookDto

@@ -1,4 +1,5 @@
 ﻿using BookingSystem.Dtos;
+using BookingSystem.Entities;
 using BookingSystem.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,7 +17,7 @@ namespace BookingSystem.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<List<BookDto>> GetBookedDays(int id) =>
+        public async Task<List<Book>> GetBookedDays(int id) =>
            await _bookingService.GetBookedGuestHouesPerDays(id);
 
         [HttpGet("User/{id}")]

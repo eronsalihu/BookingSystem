@@ -1,10 +1,11 @@
 ﻿using BookingSystem.Dtos;
+using BookingSystem.Entities;
 
 namespace BookingSystem.Interfaces
 {
     public interface IBookingService
     {
         Task<List<BookDto>> GetBookingsByUserId(string userId);
-        Task<List<BookDto>> GetBookedGuestHouesPerDays(int id);
+        Task<List<Book>> GetBookedGuestHouesPerDays(int id);
     }
 }
